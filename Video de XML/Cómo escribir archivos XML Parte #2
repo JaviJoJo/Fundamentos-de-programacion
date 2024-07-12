@@ -1,0 +1,56 @@
+using System;
+using System.Xml;
+
+namespace WorkingWithXL
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //UsingXmlWriter();
+            UsingXmlDocument();
+        }
+
+        private static void UsingXmlWriter()
+        private static void UsingXmlDocument()
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            XmlNode rootNode = xmlDoc.CreateElement("Contacts");
+            xmlDoc.AppendChild(rootNode);
+            
+            XmlNode contactNode = xmlDoc.CreateElement("Contact");
+            XmlAttribute attribute = xmlDoc.CreateAttribute("Phone");
+            attribute.Value = "87654321";
+            contactNode.Attributes.Append(attribute);
+            contactNode.Innertext = "Profesor Pichardo";
+            rootNode.AppendChild(contactNode);
+            
+            contactNode = xmlDoc.CreateElement("Contact");
+            attribute = xmlDoc.CreateAttribute("Phone"); attribute.Value = "0988972"; contactNode.AppendChild(attribute);
+            attribute = xmlDoc.CreateAttribute("Work_Phone"); attribute.Value = "06889897";
+            contactNode.Attributes.Append(attribute);
+            contactNode.InnerText = "Tony Stark";
+            rootNode.Attributes.Append(contactNode);
+            xmlDoc.save("UsandoXmldocument.xml")
+        }
+        {
+            using (XmlWriter xmlWriter = XmlWriter.Create("UsingXmlWriter.xml"))
+            {
+                xmlWriter.WriteStartDocument();
+                xmlWriter.WriteStartElement("Contacts");
+                
+                xmlWriter.WriteStartElement("Contact");
+                xmlWriter.WriteAttributeString("Phone", "02578962");
+                xmlWriter.WriteString("Junior Brito");
+                xmlWriter.WriteEndElement();
+
+                xmlWriter.WriteStartElement("Contact");
+                xmlWriter.WriteAttributeString("Phone", "12345678");
+                xmlWriter.WriteString("Javier Martinez");
+                xmlWriter.WriteEndElement(); 
+
+                xmlWriter.WriteEndDocument();
+            }
+        }
+    }
+}
