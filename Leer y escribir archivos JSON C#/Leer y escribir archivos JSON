@@ -1,0 +1,108 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
+
+namespace Json.Net_Sample
+{
+    public class Program
+    {
+        private static string _path = @"C:\Json Sample\Contacts.json";
+
+        static void Main(string[] args)
+        {
+            var contacts = GetContacts();
+            SerializeJsonFile(contacts);
+            var contactsJsonFromFile = File.ReadAllText(_path);
+            DeserializeJsonFile(contactsJsonFromFile);
+        }
+
+        public static void SerializeJsonFile(List<Contact> contacts)
+        {
+            string contactsJson = JsonConvert.SerializeObject(contacts, Formatting.Indented);
+            File.WriteAllText(_path, contactsJson);
+        }
+
+        public static List<Contact> GetContacts()
+        {
+            List<Contact> contacts = new List<Contact>
+            {
+                new Contact
+                {
+                    Name = "John Wick",
+                    DateOfBirth = new DateTime(1980, 05, 17),
+                    Address = new Address
+                    {
+                        Street = "Continental St",
+                        Number = 19,
+                        City = new City
+                        {
+                            Name = "New York",
+                            Country = new Country { Code = "USA", Name = "United States" }
+                        }
+                    },
+                    Phones = new List<Phone>
+                    {
+                        new Phone { Name = "Personal", Number = "12345678" },
+                        new Phone { Name = "Work", Number = "87654321" }
+                    }
+                }
+            };
+
+            return contacts;
+        }
+
+        public static void DeserializeJsonFile(string contactsJsonFromFile)
+        {
+            var contacts = JsonConvert.DeserializeObject<List<Contact>>(contactsJsonFromFile);
+            foreach (var contact in contacts)
+            {
+                Console.WriteLine($"Name: {contact.Name}, Date of Birth: {contact.DateOfBirth.ToShortDateString()}");
+                if (contact.Address != null)
+                {
+                    Console.WriteLine($"Address: {contact.Address.Street} {contact.Address.Number}, {contact.Address.City.Name}, {contact.Address.City.Country.Name}");
+                }
+                if (contact.Phones != null)
+                {
+                    foreach (var phone in contact.Phones)
+                    {
+                        Console.WriteLine($"Phone: {phone.Name} - {phone.Number}");
+                    }
+                }
+            }
+        }
+    }
+
+    public class Contact
+    {
+        public string Name { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public Address Address { get; set; }
+        public List<Phone> Phones { get; set; }
+    }
+
+    public class Address
+    {
+        public string Street { get; set; }
+        public int Number { get; set; }
+        public City City { get; set; }
+    }
+
+    public class City
+    {
+        public string Name { get; set; }
+        public Country Country { get; set; }
+    }
+
+    public class Country
+    {
+        public string Name { get; set; }
+        public string Code { get; set; }
+    }
+
+    public class Phone
+    {
+        public string Name { get; set; }
+        public string Number { get; set; }
+    }
+}
